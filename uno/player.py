@@ -9,6 +9,14 @@ class PlayerProtype:
         self.hand = initial_hand
 
     def execute_turn(self, top_card: Card, extra_cards: list = None) -> Card:
+        if extra_cards is not None:
+            self.hand.extend(extra_cards)
+        selected_card = self.select_card(top_card)
+        if selected_card is not None:
+            assert(selected_card.allowed(top_card)), f"{select_card} cannot be placed on {top_card}"
+        return selected_card
+    
+    def select_card(top_card: Card) -> Card:
         raise(NotImplementedError())
 
     @property
@@ -19,10 +27,7 @@ class PlayerProtype:
         return '\n-'.join([str(card) for card in self.hand])
 
 class NaivePlayer(PlayerProtype):
-    def execute_turn(self, top_card: Card, extra_cards: list = None) -> Card:
-        #import pdb;pdb.set_trace()
-        if extra_cards is not None:
-            self.hand.extend(extra_cards)
+    def select_card(self, top_card: Card) -> Card:        
         selected_card = None
         for card in self.hand:
             if card.allowed(top_card):

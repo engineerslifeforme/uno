@@ -23,7 +23,7 @@ class ColorCard(Card):
 
     def allowed(self, other: Card) -> bool:
         result = False
-        if issubclass(ColorCard, type(other)):
+        if issubclass(type(other), ColorCard):
             result = other.color == self.color
         return result
 
@@ -37,7 +37,7 @@ class NumberCard(ColorCard):
 
     def allowed(self, other: Card) -> bool:
         result = super().allowed(other)
-        if issubclass(NumberCard, type(other)):
+        if issubclass(type(other), NumberCard):
             result |= self.number == other.number
         return result
 

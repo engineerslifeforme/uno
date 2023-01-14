@@ -1,3 +1,8 @@
+import sys
+
 from game import Game
 
-agame = Game(2)
+players = int(sys.argv[1])
+
+print(f"Executing game with {players} players")
+agame = Game(players)

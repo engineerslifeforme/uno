@@ -17,7 +17,9 @@ class Game:
         turn_index = 0
         increment = 1
         previous_action = None
+        turns = 0
         while True:
+            turns += 1
             print(f"Top Card: {self.discard_pile[-1]}")
             player_index = turn_index % players
             active_player = self.players[player_index]
@@ -50,6 +52,7 @@ class Game:
                 print(f"Player {player_index} Wins!")
                 break
             turn_index += increment
+        print(f"Turns played: {turns}")
     
     def deal(self, player_quantity: int) -> list:
         hands = [[] for _ in range(player_quantity)]
