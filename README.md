@@ -20,3 +20,12 @@ python run.py 3
 ```
 python -m pytest tests
 ```
+
+# TODO
+
+1. Provide player additional info
+    
+    - Quantity of cards in opponents hands
+    - Recent/All cards previous played
+
+2. Reshuffle the deck if empty
