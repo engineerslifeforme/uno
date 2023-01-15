@@ -82,7 +82,7 @@ class Deck:
 
     def __init__(self):
         self.cards = self.create_deck()
-        shuffle(self.cards)
+        self.shuffle()
 
     def create_deck(self) -> list:
         cards = []
@@ -101,5 +101,8 @@ class Deck:
 
     def draw(self) -> Card:
         return self.cards.pop()
+
+    def shuffle(self):
+        shuffle(self.cards)
 
         
