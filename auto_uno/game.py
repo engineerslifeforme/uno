@@ -1,8 +1,8 @@
 """ Game Manager """
 
-from actions import RequiredActions
-from cards import Deck, WildCard, ReverseCard, SkipCard, DrawTwoCard, WildDrawFourCard, Card
-from player import NaivePlayer
+from auto_uno.actions import RequiredActions
+from auto_uno.cards import Deck, WildCard, ReverseCard, SkipCard, DrawTwoCard, WildDrawFourCard, Card
+from auto_uno.player import NaivePlayer
 
 class Game:
 
@@ -14,8 +14,6 @@ class Game:
         initial_hands = self.deal(players)
         self.players = [NaivePlayer(hand) for hand in initial_hands]
         self.discard_pile = [self.deck.draw()]
-        while type(self.discard_pile[-1]) == WildCard:
-            self.discard_pile.append(self.draw())
 
     @property
     def top_card(self) -> Card:
@@ -66,11 +64,9 @@ class Game:
                 if played_card is None:
                     drawn_card = self.draw()
                     print(f"Player {player_index} draws {drawn_card}")
-                    if drawn_card.allowed(self.top_card):
-                        self.discard_pile.append(drawn_card)
-                    else:
-                        active_player.hand.append(drawn_card)
-                else:
+                    active_player.hand.append(drawn_card)
+                    played_card = active_player.post_card_drawn(self.top_card)
+                if played_card is not None:
                     print(f"Player {player_index} played {played_card}")
                     self.discard_pile.append(played_card)
                     played_card_type = type(played_card)

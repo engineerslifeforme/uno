@@ -1,22 +1,33 @@
 """ Uno Player """
 
-from cards import Card, WildCard, ColorCard, Color, WildDrawFourCard
-from actions import RequiredActions
+from auto_uno.cards import Card, WildCard, ColorCard, Color, WildDrawFourCard
+from auto_uno.actions import RequiredActions
 
-class PlayerProtype:
+class PlayerPrototype:
 
     def __init__(self, initial_hand: list):
         self.hand = initial_hand
 
     def execute_turn(self, top_card: Card) -> Card:
-        selected_card = self.select_card(top_card)
+        return self.turn(top_card, self.select_card)
+    
+    def turn(self, top_card: Card, selection_method) -> Card:
+        selected_card = selection_method(top_card)
+        self.verify_selection(selected_card, top_card)
+        return selected_card
+
+    def verify_selection(self, selected_card: Card, top_card: Card):
         if selected_card is not None:
-            assert(selected_card.allowed(top_card)), f"{select_card} cannot be placed on {top_card}"
+            assert(selected_card.allowed(top_card)), f"{selected_card} cannot be placed on {top_card}"
             if issubclass(type(selected_card), WildDrawFourCard) and issubclass(type(top_card), ColorCard):
                 hand_colors = [card.color for card in self.hand if issubclass(type(card), ColorCard)]
                 assert(top_card.color not in hand_colors), "Cannot play Draw 4 wild if you have the color"
+    
+    def post_card_drawn(self, top_card: Card) -> Card:
+        return self.turn(top_card, self.select_card_after_draw)
 
-        return selected_card
+    def select_card_after_draw(self, top_card: Card) -> Card:
+        return self.select_card(top_card)
     
     def select_card(top_card: Card) -> Card:
         raise(NotImplementedError())
@@ -47,7 +58,7 @@ class PlayerProtype:
                 max_count = quantity
         return max_color
 
-class NaivePlayer(PlayerProtype):
+class NaivePlayer(PlayerPrototype):
     def select_card(self, top_card: Card) -> Card:        
         selected_card = None
         draw_four_card = None

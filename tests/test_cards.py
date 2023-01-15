@@ -1,6 +1,6 @@
 """ Test Card behaviors """
 
-from uno.cards import (
+from auto_uno.cards import (
     NumberCard,
     ReverseCard,
     SkipCard,
